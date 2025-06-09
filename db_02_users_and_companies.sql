@@ -32,7 +32,7 @@ CREATE TABLE users {
     unsubscribe_email TIMESTAMP,
 
     is_partner BOOLEAN DEFAULT FALSE,
-    partner_key UUID,
+--  partner_key DEFAULT gen_random_uuid()
     bonus_balance INTEGER DEFAULT 0,
     deposit_balance DECIMAL(15,2) DEFAULT 0.00
 };

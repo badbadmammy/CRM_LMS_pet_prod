@@ -1,1 +1,15 @@
 CREATE UNIQUE INDEX unique_lower_email ON users (LOWER(email));
+
+ALTER TABLE users
+ADD CONSTRAINT utm_create_user
+FOREIGN KEY (created_utm_id)
+REFERENCES utm(id)
+ON UPDATE CASCADE
+ON DELETE RESTRICT;
+
+ALTER TABLE deals
+ADD CONSTRAINT utm_create_deal
+FOREIGN KEY (created_utm_id)
+REFERENCES utm(id)
+ON UPDATE CASCADE
+ON DELETE RESTRICT;

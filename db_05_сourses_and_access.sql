@@ -1,29 +1,41 @@
-//Контент
-Table Сontent {
-  content_id uuid [primary key]
-  content_id_created_at timestamp [not null]
-  content_name varchar [not null]
-  content_description varchar [default: 0]
-  product_id uuid [null, note: 'connection with products table']
-}
+CREATE TABLE trainings {
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
 
-//Тренинги
-Table Trainings {
-  training_id uuid [primary key]
-  training_id_created_at timestamp [not null]
-  training_name varchar [not null]
-  training_description varchar [default: 0]
-  training_tag varchar [not null]
-}
+    name VARCHAR(100),
+    description TEXT,
+    url TEXT,
+--  tag varchar [not null]
+};
 
-//Доступ к тренингам
+CREATE TABLE content {
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    name VARCHAR(100),
+    description TEXT,
+    url TEXT,
+
+--    product_id INTEGER,
+
+--    FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
+};
+
 Table Trainings_Users_Access {
-  training_user_access_id uuid [primary key]
-  training_user_access_id_created_at timestamp [not null]
-  user_id uuid [not null, note: 'connection with users table']
-  training_id uuid [not null, note: 'connection with trainings table']
-  have_access boolean [default: False]
-  have_access_true_created_at timestamp [not null]
-  started_training timestamp [default: 0]
-  finished_training timestamp [default: 0]
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    user_id INTEGER,
+    training_id INTEGER,
+    have_access BOOLEAN DEFAULT FALSE,
+    have_access_start_at TIMESTAMP,
+    have_access_finished_at TIMESTAMP,
+    started_training TIMESTAMP,
+    finished_training TIMESTAMP
 }
