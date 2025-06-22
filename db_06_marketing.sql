@@ -1,15 +1,3 @@
-CREATE TABLE groups {
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    created_at TIMESTAMP DEFAULT now(),
-    updated_at TIMESTAMP,
-    deleted_at TIMESTAMP,
-
-    user_id INTEGER,
-    name_group TEXT,
-
-    FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE
-};
-
 CREATE TABLE user_marketing_profile {
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
@@ -18,16 +6,37 @@ CREATE TABLE user_marketing_profile {
 
     user_id INTEGER,
     how_found_us how_found_us_enum,
-    source_detail VARCHAR(300),
-    preferred_channel preferred_channel_enum NOT NULL,
-    spend_for_education_yearly INTEGER,
+    how_found_us_comment VARCHAR(100),
+    is_parent BOOLEAN DEFAULT FALSE,
+    is_specialist BOOLEAN DEFAULT FALSE,
+    important_in_course TEXT,
+    spend_for_education_yearly spend_for_education_yearly_enum,
     decision_maker BOOLEAN DEFAULT TRUE,
+    doubts doubts_enum,
     competitors TEXT,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
 };
 
 COMMENT ON COLUMN user_marketing_profile.decision_maker IS 'if true - make decision himself';
+
+CREATE TABLE user_products_connections {
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    user_id INTEGER,
+    product_id INTEGER,
+    interested_in_product BOOLEAN DEFAULT FALSE,
+    bought_product BOOLEAN DEFAULT FALSE,
+    now_learn BOOLEAN DEFAULT FALSE,
+    finished_learning BOOLEAN DEFAULT FALSE,
+    reason_of_learning reason_of_learning_enum,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE CASCADE
+};
 
 CREATE TABLE utm {
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -57,10 +66,23 @@ CREATE TABLE events {
     name VARCHAR(300),
     kort_name VARCHAR(10),
 --    type enum [not null, note: '']
---    product_id uuid [null, note: 'connection with products table']
---    methodology_id uuid [null, note: 'connection with  methodologes table']
+   method_id INTEGER,
+
+   FOREIGN KEY (method_id) REFERENCES methods(id) ON UPDATE CASCADE ON DELETE RESTRICT
 };
 
+CREATE TABLE events_products_connections {
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    event_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+
+    FOREIGN KEY (event_id) REFERENCES events(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
+};
 
 CREATE TABLE events_users_registrations {
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -88,17 +110,28 @@ CREATE TABLE webinars {
     deleted_at TIMESTAMP,
 
     webinar_type webinar_type_enum,
-    webinar_name VARCHAR (300),
-    webinar_description TEXT,
-    webinar_started TIMESTAMP,
-    webinar_ended TIMESTAMP,
+    name VARCHAR (300),
+    description TEXT,
+    started_at TIMESTAMP,
+    ended_at TIMESTAMP,
     webinar_user_count INTEGER,
 
-    event_id INTEGER,
---    product_id uuid [null, note: 'connection with products table']
---    methodology_id uuid [null, note: 'connection with  methodologes table']
+    method_id INTEGER,
 
-    FOREIGN KEY (event_id) REFERENCES events(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (method_id) REFERENCES methods(id) ON UPDATE CASCADE ON DELETE RESTRICT
+};
+
+CREATE TABLE webinars_products_connections {
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+
+    webinar_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+
+    FOREIGN KEY (webinar_id) REFERENCES webinars(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
 };
 
 CREATE TABLE events_webinars_connections {
@@ -109,11 +142,9 @@ CREATE TABLE events_webinars_connections {
 
     webinar_id INTEGER NOT NULL,
     event_id INTEGER NOT NULL,
---    product_id uuid [null, note: 'connection with products table']
---    methodology_id uuid [null, note: 'connection with  methodologes table']
 
     FOREIGN KEY (event_id) REFERENCES events(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    FOREIGN KEY (webinar_id) REFERENCES webinars(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (webinar_id) REFERENCES webinars(id) ON UPDATE CASCADE ON DELETE RESTRICT
 };
 
 

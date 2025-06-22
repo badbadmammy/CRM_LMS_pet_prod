@@ -1,4 +1,4 @@
-CREATE TABLE documents {
+CREATE TABLE documents (
     document_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -7,23 +7,35 @@ CREATE TABLE documents {
     user_id INTEGER,
     company_id INTEGER,
 
+    -- Основная информация
     document_type document_type_enum NOT NULL,
-    document_series VARCHAR(50),
-    document_number VARCHAR(50),
-    date_start DATE,
-    valid_until DATE,
-    who_give VARCHAR(300),
-    place VARCHAR(100),
-    document_url TEXT,
-
-    verification_date TIMESTAMP,
-    is_verified BOOLEAN DEFAULT FALSE,
-    document_status document_status_enum,
+    document_status document_status_enum DEFAULT'действителен',
     document_language VARCHAR(50),
+    document_url TEXT NOT NULL,
+    is_verified BOOLEAN DEFAULT FALSE,
+    verification_date TIMESTAMP,
 
+    -- Внешние документы
+    document_series VARCHAR(50),          -- Серия (если есть)
+    document_number VARCHAR(50),          -- Номер документа
+    date_start DATE,                      -- Дата выдачи
+    valid_until DATE,                     -- Действителен до
+    who_give VARCHAR(300),                -- Кем выдан
+    place VARCHAR(100),                   -- Место выдачи
+    department_code VARCHAR(20),          -- Код подразделения (паспорт)
+
+    -- Для договоров и внутренних документов (МАМР)
+    contract_number VARCHAR(50),          -- Номер договора
+    course_place course_place_enum,       -- Место проведения курса
+    deals_id INTEGER,                     -- Структура платежей: [{"date": "...", "amount": ..., "payment_type": "..."}]
+    created_by INTEGER,                   -- Кто оформил
+    signed_at TIMESTAMP,                  -- Дата подписания
+
+    -- Связи
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+    FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+);
 
 CREATE TABLE addresses {
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
