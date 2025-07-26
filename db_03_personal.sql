@@ -37,7 +37,7 @@ CREATE TABLE documents (
     FOREIGN KEY (created_by) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
 );
 
-CREATE TABLE addresses {
+CREATE TABLE addresses (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -60,9 +60,9 @@ CREATE TABLE addresses {
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE company_details {
+CREATE TABLE company_details (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -78,9 +78,9 @@ CREATE TABLE company_details {
     company_lead VARCHAR(300),
 
     FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE bank_details {
+CREATE TABLE bank_details (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -101,4 +101,4 @@ CREATE TABLE bank_details {
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);

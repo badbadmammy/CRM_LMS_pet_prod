@@ -1,4 +1,4 @@
-CREATE TABLE products {
+CREATE TABLE products (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     outside_id UUID DEFAULT gen_random_uuid(),
     created_at TIMESTAMP DEFAULT now(),
@@ -15,9 +15,9 @@ CREATE TABLE products {
     for_wide_audience BOOLEAN DEFAULT FALSE,
     is_basic BOOLEAN DEFAULT FALSE,
     is_specialized BOOLEAN DEFAULT FALSE
-};
+);
 
-CREATE TABLE packets {
+CREATE TABLE packets (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -25,9 +25,9 @@ CREATE TABLE packets {
 
     name VARCHAR(300) NOT NULL
     --    tag varchar [not null]
-};
+);
 
-CREATE TABLE packets_products_connections {
+CREATE TABLE packets_products_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -38,9 +38,9 @@ CREATE TABLE packets_products_connections {
 
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (packet_id) REFERENCES packets(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE goods {
+CREATE TABLE goods (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     outside_id UUID DEFAULT gen_random_uuid(),
     created_at TIMESTAMP DEFAULT now(),
@@ -56,12 +56,12 @@ CREATE TABLE goods {
     package_weight INTEGER,
     amount_now INTEGER
     --    tag varchar [not null]
-};
+);
 
 COMMENT ON COLUMN goods.good_weight IS 'weight is in grams';
 COMMENT ON COLUMN goods.package_weight IS 'weight is in grams';
 
-CREATE TABLE price_list {
+CREATE TABLE price_list (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     outside_id UUID DEFAULT gen_random_uuid(),
     created_at TIMESTAMP DEFAULT now(),
@@ -81,11 +81,11 @@ CREATE TABLE price_list {
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (good_id) REFERENCES goods(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (packet_id) REFERENCES packets(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
 COMMENT ON COLUMN price_list.access_period IS 'number of days';
 
-CREATE TABLE deals {
+CREATE TABLE deals (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     created_utm_id INTEGER,
@@ -118,11 +118,11 @@ CREATE TABLE deals {
     FOREIGN KEY (partner_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (hunter_manager) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (farm_manager) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
 COMMENT ON COLUMN deals.deal_currency IS 'код валюты заказа - rub, если нет данных';
 
-CREATE TABLE payments {
+CREATE TABLE payments (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -131,9 +131,9 @@ CREATE TABLE payments {
     payment_cost DECIMAL(10, 2) NOT NULL,
     payment_type payment_type_enum NOT NULL,
     payment_status payment_status_enum NOT NULL
-};
+);
 
-CREATE TABLE deals_price_connections {
+CREATE TABLE deals_price_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -145,9 +145,9 @@ CREATE TABLE deals_price_connections {
 
     FOREIGN KEY (deal_id) REFERENCES deals(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (price_id) REFERENCES price_list(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE deals_users_connections {
+CREATE TABLE deals_users_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -158,9 +158,9 @@ CREATE TABLE deals_users_connections {
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (deal_id) REFERENCES deals(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE deals_payments_connections {
+CREATE TABLE deals_payments_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -172,6 +172,6 @@ CREATE TABLE deals_payments_connections {
 
     FOREIGN KEY (deal_id) REFERENCES deals(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (payment_id) REFERENCES payments(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
 COMMENT ON COLUMN deals_payments_connections.connection_cost IS 'сколько денег из платежа списывается за конкретный заказ'

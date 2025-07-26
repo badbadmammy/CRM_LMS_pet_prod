@@ -1,4 +1,4 @@
-CREATE TABLE trainings {
+CREATE TABLE trainings (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -12,9 +12,9 @@ CREATE TABLE trainings {
     product_id INTEGER,
 
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE content {
+CREATE TABLE content (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -29,9 +29,9 @@ CREATE TABLE content {
     ordinal_number INTEGER,
 
     FOREIGN KEY (training_id) REFERENCES trainings(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE method_product_stage {
+CREATE TABLE method_product_stage (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -43,10 +43,10 @@ CREATE TABLE method_product_stage {
 
     FOREIGN KEY (method_id) REFERENCES methods(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
 
-CREATE TABLE trainings_users_access {
+CREATE TABLE trainings_users_access (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -60,9 +60,9 @@ CREATE TABLE trainings_users_access {
 
 --    started_training TIMESTAMP,
 --    finished_training TIMESTAMP
-};
+);
 
-CREATE TABLE trainings_staff_connection {
+CREATE TABLE trainings_staff_connection (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -80,9 +80,9 @@ CREATE TABLE trainings_staff_connection {
 
     FOREIGN KEY (training_id) REFERENCES trainings(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE calendar {
+CREATE TABLE calendar (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -94,4 +94,4 @@ CREATE TABLE calendar {
     place course_place_enum,
 
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);

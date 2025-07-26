@@ -1,4 +1,4 @@
-CREATE TABLE user_marketing_profile {
+CREATE TABLE user_marketing_profile (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -16,11 +16,11 @@ CREATE TABLE user_marketing_profile {
     competitors TEXT,
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
 COMMENT ON COLUMN user_marketing_profile.decision_maker IS 'if true - make decision himself';
 
-CREATE TABLE user_products_connections {
+CREATE TABLE user_products_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -36,9 +36,9 @@ CREATE TABLE user_products_connections {
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE CASCADE
-};
+);
 
-CREATE TABLE utm {
+CREATE TABLE utm (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -49,7 +49,7 @@ CREATE TABLE utm {
     utm_campaign VARCHAR(50),
     utm_term VARCHAR(50),
     utm_content VARCHAR(50)
-};
+);
 
 COMMENT ON COLUMN utm.utm_source IS 'name of social';
 COMMENT ON COLUMN utm.utm_medium IS 'type: email, banner';
@@ -57,7 +57,7 @@ COMMENT ON COLUMN utm.utm_utm_campaign IS 'marketing company';
 COMMENT ON COLUMN utm.utm_term IS 'keyword';
 COMMENT ON COLUMN utm.utm_content IS 'something more';
 
-CREATE TABLE events {
+CREATE TABLE events (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -69,9 +69,9 @@ CREATE TABLE events {
    method_id INTEGER,
 
    FOREIGN KEY (method_id) REFERENCES methods(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE events_products_connections {
+CREATE TABLE events_products_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -82,9 +82,9 @@ CREATE TABLE events_products_connections {
 
     FOREIGN KEY (event_id) REFERENCES events(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE events_users_registrations {
+CREATE TABLE events_users_registrations (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     created_utm_id INTEGER,
@@ -100,9 +100,9 @@ CREATE TABLE events_users_registrations {
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (event_id) REFERENCES events(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (partner_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE webinars {
+CREATE TABLE webinars (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     created_utm_id INTEGER,
@@ -119,9 +119,9 @@ CREATE TABLE webinars {
     method_id INTEGER,
 
     FOREIGN KEY (method_id) REFERENCES methods(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE webinars_products_connections {
+CREATE TABLE webinars_products_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -132,9 +132,9 @@ CREATE TABLE webinars_products_connections {
 
     FOREIGN KEY (webinar_id) REFERENCES webinars(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE events_webinars_connections {
+CREATE TABLE events_webinars_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -145,10 +145,9 @@ CREATE TABLE events_webinars_connections {
 
     FOREIGN KEY (event_id) REFERENCES events(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (webinar_id) REFERENCES webinars(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-
-CREATE TABLE webinars_users_visits {
+CREATE TABLE webinars_users_visits (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, --Бизон 365
     created_at TIMESTAMP DEFAULT now(),
     created_utm_id INTEGER,
@@ -183,4 +182,4 @@ CREATE TABLE webinars_users_visits {
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (webinar_id) REFERENCES webinars(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (partner_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);

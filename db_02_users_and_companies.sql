@@ -1,4 +1,4 @@
-CREATE TABLE users {
+CREATE TABLE users (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_gc_id INTEGER,
     sb_id_mamr_bot VARCHAR(100),
@@ -32,18 +32,17 @@ CREATE TABLE users {
     password VARCHAR(255),
     temporary_password VARCHAR(255),
     temporary_password_sent BOOLEAN DEFAULT FALSE,
-    unsubscribe_email TIMESTAMP,
 
     is_partner BOOLEAN DEFAULT FALSE,
 --  partner_key DEFAULT gen_random_uuid()
     bonus_balance INTEGER DEFAULT 0,
     deposit_balance DECIMAL(15,2) DEFAULT 0.00
-};
+);
 
 COMMENT ON COLUMN users.created_utm_id IS 'connection with table utm';
 COMMENT ON COLUMN users.partner_key IS 'for referral program';
 
-CREATE TABLE roles {
+CREATE TABLE roles (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -55,13 +54,13 @@ CREATE TABLE roles {
     is_expert BOOLEAN DEFAULT FALSE,
     is_staff BOOLEAN DEFAULT FALSE,
     is_manager BOOLEAN DEFAULT FALSE,
-    manager_type ENUM manager_type_enum,
+    manager_type manager_type_enum,
     is_admin BOOLEAN DEFAULT FALSE,
 
-    FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
-};
+    FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
 
-CREATE TABLE companies {
+CREATE TABLE companies (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -73,9 +72,9 @@ CREATE TABLE companies {
     company_phone VARCHAR(20) CHECK (company_phone ~ '^\+\d{8,15}$'),
     company_email VARCHAR(100) UNIQUE NOT NULL CHECK (company_email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
     company_site VARCHAR(300)
-};
+);
 
-CREATE TABLE company_positions {
+CREATE TABLE company_positions (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -87,9 +86,9 @@ CREATE TABLE company_positions {
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
 
-CREATE TABLE users_companies_managers_connections {
+CREATE TABLE users_companies_managers_connections (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP,
@@ -106,4 +105,4 @@ CREATE TABLE users_companies_managers_connections {
     FOREIGN KEY (manager_hunter_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (manager_farm_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON UPDATE CASCADE ON DELETE RESTRICT
-};
+);
